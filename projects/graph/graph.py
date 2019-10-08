@@ -61,14 +61,13 @@ class Graph:
                 for next_vertex in self.vertices[vertex]:
                     stack.push(next_vertex)
 
+ 
     def dft_recursive(self, starting_vertex):
         """
         Print each vertex in depth-first order
         beginning from starting_vertex.
         This should be done using recursion.
         """
-
-        
         print (starting_vertex)
         self.dft_visited.add(starting_vertex)
 
@@ -79,15 +78,36 @@ class Graph:
                 if adjacent_vertex not in self.dft_visited:
                     self.dft_recursive(adjacent_vertex)
 
+    
+    # #################### Solution code ##########################
+    
+    # def dft_recursive(self, starting_vertex, visited=None):
+
+    #     if visited is None:
+    #         visited = set()
+        
+    #     print(starting_vertex)
+    #     visited.add(starting_vertex)
+    #     for child_vertex in self.vertices[starting_vertex]:
+    #         if child_vertex not in visited:
+    #             self.dft_recursive(child_vertex, visited)
+
+
+    ##########################################################
+
+
+
+        
+
 
 
     def bfs(self, starting_vertex, destination_vertex):
+
         """
         Return a list containing the shortest path from
         starting_vertex to destination_vertex in
         breath-first order.
         """
-        
 
         # start is destitnation? done!
         if starting_vertex == destination_vertex:
@@ -124,17 +144,34 @@ class Graph:
             return []
 
 
-        
-            
-            
+    # #################### Solution code ##########################
 
+    # def bfs(self, starting_vertex, destination_vertex):
+        
+    #     qq = Queue()
+    #     visited = set()
+    #     qq.enqueue([starting_vertex])
+
+    #     while qq.size() > 0:
+    #         path = qq.dequeue()
+    #         vertex = path[-1]
+    #         if vertex not in visited:
+    #             if vertex == destination_vertex:
+    #                 return path
+    #             visited.add(vertex)
+
+    #             for next_vert in self.vertices[vertex]:
+    #                 new_path = list(path) #deep copy !
+    #                 new_path.append(next_vert)
+    #                 qq.enqueue(new_path)
+        # #########################################################
+            
     def dfs(self, starting_vertex, destination_vertex):
         """
         Return a list containing a path from
         starting_vertex to destination_vertex in
         depth-first order.
         """
-
         start_path = [starting_vertex]
 
         if starting_vertex == destination_vertex:
@@ -148,19 +185,41 @@ class Graph:
             adjacent_vertices = self.vertices[starting_vertex]
 
             # get adjacent vertices not already visited
-            adjacent_not_visited = adjacent_vertices.difference(self.dfs_visited)
+            adjacent_not_visited = adjacent_vertices.difference(
+                self.dfs_visited)
 
             #process adjacent vertices not already visited
             for adjacent_vertex in adjacent_not_visited:
                 found = self.dfs(adjacent_vertex, destination_vertex)
-                if found: 
+                if found:
                     return start_path + found
             return None
 
+    
+    
+    # #################### Solution code ##########################
                 
-                            
+    # def dfs(self, starting_vertex, destination_vertex):
+                      
 
+    #     s = Stack()
+    #     visited = set()
+    #     s.push([starting_vertex])
 
+    #     while s.size() > 0:
+    #         path = s.pop()
+    #         vertex = path[-1]
+    #         if vertex not in visited:
+    #             if vertex == destination_vertex:
+    #                 return path
+    #             visited.add(vertex)
+
+    #             for next_vert in self.vertices[vertex]:
+    #                 new_path = list(path) #deep copy !
+    #                 new_path.append(next_vert)
+    #                 s.push(new_path)
+
+        # #########################################################
 
 
 
