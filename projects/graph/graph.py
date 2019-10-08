@@ -7,8 +7,9 @@ class Graph:
     """Represent a graph as a dictionary of vertices mapping labels to edges."""
     def __init__(self):
         self.vertices = {}
-        self.visited = set()
+        self.dft_visited = set()
         self.dfs_visited = set()
+
     def add_vertex(self, vertex):
         """
         Add a vertex to the graph.
@@ -69,13 +70,13 @@ class Graph:
 
         
         print (starting_vertex)
-        self.visited.add(starting_vertex)
+        self.dft_visited.add(starting_vertex)
 
 
         adjacent_vertices = self.vertices[starting_vertex]
         if adjacent_vertices:
             for adjacent_vertex in adjacent_vertices:
-                if adjacent_vertex not in self.visited:
+                if adjacent_vertex not in self.dft_visited:
                     self.dft_recursive(adjacent_vertex)
 
 
@@ -86,7 +87,47 @@ class Graph:
         starting_vertex to destination_vertex in
         breath-first order.
         """
-        pass  # TODO
+        
+
+        # start is destitnation? done!
+        if starting_vertex == destination_vertex:
+            return [starting_vertex]
+
+        else:
+
+            #will contain complete paths
+            queue = Queue()
+            queue.enqueue([starting_vertex])
+
+            visited = set()
+
+
+            while queue:
+
+                path = queue.dequeue()
+                last_vertex = path[-1]
+
+                adjacent_vertices = self.vertices[last_vertex]
+
+                # cycle through all non visited adjacent vertices
+                for adjacent_vertex in adjacent_vertices:
+                    if adjacent_vertex not in visited:
+                        new_path = path.copy()
+                        new_path.append(adjacent_vertex)
+                        if adjacent_vertex == destination_vertex:
+                            return new_path
+                        else:
+                            queue.enqueue(new_path)
+                visited.add(last_vertex)
+                
+                
+            return []
+
+
+        
+            
+            
+
     def dfs(self, starting_vertex, destination_vertex):
         """
         Return a list containing a path from
@@ -94,30 +135,27 @@ class Graph:
         depth-first order.
         """
 
-        path=[starting_vertex]
+        start_path = [starting_vertex]
 
         if starting_vertex == destination_vertex:
             return [starting_vertex]
 
         else:
-            # Add current vertex in visited set
+            # Flag current vertex as visited
             self.dfs_visited.add(starting_vertex)
+
             # get set of adjacent vertices
             adjacent_vertices = self.vertices[starting_vertex]
 
-            # case where all adjacent vertices have already been visited
-            if adjacent_vertices.issubset(self.dfs_visited):
-                return None
+            # get adjacent vertices not already visited
+            adjacent_not_visited = adjacent_vertices.difference(self.dfs_visited)
 
-            else:
-
-                #process adjacent virtices
-                for adjacent_vertex in adjacent_vertices:
-                    if adjacent_vertex not in self.dfs_visited:
-                        found = self.dfs(adjacent_vertex, destination_vertex)
-                        if found: 
-                            return path + found
-                return None
+            #process adjacent vertices not already visited
+            for adjacent_vertex in adjacent_not_visited:
+                found = self.dfs(adjacent_vertex, destination_vertex)
+                if found: 
+                    return start_path + found
+            return None
 
                 
                             
