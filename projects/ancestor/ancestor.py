@@ -14,7 +14,7 @@ def earliest_ancestor(ancestors, child):
     while qq:
         parents = qq.dequeue()
         older_parents = []
-        
+
         for parent in parents:
             older_parents.extend(find_parents(ancestors, parent))
         
