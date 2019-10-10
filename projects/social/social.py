@@ -1,8 +1,14 @@
+import itertools
+import random
+
 
 
 class User:
     def __init__(self, name):
         self.name = name
+
+    def __str__(self):
+        return self.name
 
 class SocialGraph:
     def __init__(self):
@@ -46,9 +52,36 @@ class SocialGraph:
         self.friendships = {}
         # !!!! IMPLEMENT ME
 
-        # Add users
+        # Add users and create friendships
 
-        # Create friendships
+        #create a number of users
+        for i in range(0, numUsers):
+            self.addUser("f:User {i}")
+
+        possible_friendships = []
+        for UserID in self.users:
+            for friendID in range(UserID + 1, self.lastID + 1):
+                possible_friendships.append((UserID, friendID))
+        random.shuffle(possible_friendships)
+
+        for i in range(numUsers * avgFriendships // 2):
+            friendship = possible_friendships[i]
+            self.addFriendship(friendship[0], friendship[1])
+
+
+        # Select a random group of friends 
+        # for user in self.users:
+        #     group_size = random.randrange(0, 2*avgFriendships, 1)
+        #     groups = list(itertools.combinations(self.users, group_size))
+        #     group = random.choice(groups)
+        #     for friend in group:
+        #         if user != friend:
+        #             self.addFriendship(user, friend)
+
+
+            
+
+
 
     def getAllSocialPaths(self, userID):
         """
@@ -61,7 +94,41 @@ class SocialGraph:
         """
         visited = {}  # Note that this is a dictionary, not a set
         # !!!! IMPLEMENT ME
+        
+        qq = Queue()
+        qq.enqueue([userID])
+
+        while qq.size() > 0:
+            path = qq.dequeue()
+            # get last friend of that path
+            friend = path[-1]
+            # save whole path
+            if friend not in visited:
+                visited[friend] = path
+
+            # check new friends of last friend
+            for new_friend in self.friendships[friend]:
+                if new_friend not in visited.keys(): #needed?
+                    new_path = path.copy()
+                    new_path.append(new_friend)
+                    qq.enqueue(new_path)
+
+
         return visited
+
+
+class Queue():
+    def __init__(self):
+        self.queue = []
+    def enqueue(self, value):
+        self.queue.append(value)
+    def dequeue(self):
+        if self.size() > 0:
+            return self.queue.pop(0)
+        else:
+            return None
+    def size(self):
+        return len(self.queue)
 
 
 if __name__ == '__main__':
