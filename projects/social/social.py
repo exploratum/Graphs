@@ -21,12 +21,15 @@ class SocialGraph:
         Creates a bi-directional friendship
         """
         if userID == friendID:
-            print("WARNING: You cannot be friends with yourself")
+            return False
+            #print("WARNING: You cannot be friends with yourself")
         elif friendID in self.friendships[userID] or userID in self.friendships[friendID]:
-            print("WARNING: Friendship already exists")
+            return False
+            #print("WARNING: Friendship already exists")
         else:
             self.friendships[userID].add(friendID)
             self.friendships[friendID].add(userID)
+            return True
 
     def addUser(self, name):
         """
@@ -58,17 +61,32 @@ class SocialGraph:
         for i in range(0, numUsers):
             self.addUser("f:User {i}")
 
-        possible_friendships = []
-        for UserID in self.users:
-            for friendID in range(UserID + 1, self.lastID + 1):
-                possible_friendships.append((UserID, friendID))
-        random.shuffle(possible_friendships)
+        targetFrienships = numUsers * avgFriendships
+        total_frienships = 0
+        collisions = 0
 
-        for i in range(numUsers * avgFriendships // 2):
-            friendship = possible_friendships[i]
-            self.addFriendship(friendship[0], friendship[1])
+        while total_frienships < targetFrienships:
+            userId = random.randrange(1, self.lastID)
+            friendID = random.randint(1, self.lastID)
+            if self.addFriendship(userId, friendID):
+                total_frienships += 2
+            else:
+                collisions += 1
 
+        print(f"Collisions: {collisions}")
 
+        #first lecture solution
+        # possible_friendships = []
+        # for UserID in self.users:
+        #     for friendID in range(UserID + 1, self.lastID + 1):
+        #         possible_friendships.append((UserID, friendID))
+        # random.shuffle(possible_friendships)
+
+        # for i in range(numUsers * avgFriendships // 2):
+        #     friendship = possible_friendships[i]
+        #     self.addFriendship(friendship[0], friendship[1])
+
+        # my solution - unfinished
         # Select a random group of friends 
         # for user in self.users:
         #     group_size = random.randrange(0, 2*avgFriendships, 1)
