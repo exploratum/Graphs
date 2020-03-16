@@ -73,10 +73,13 @@ class Graph:
 
 
         adjacent_vertices = self.vertices[starting_vertex]
-        if adjacent_vertices:
-            for adjacent_vertex in adjacent_vertices:
-                if adjacent_vertex not in self.dft_visited:
-                    self.dft_recursive(adjacent_vertex)
+        # if adjacent_vertices:
+        for vertex in adjacent_vertices:
+            if vertex not in self.dft_visited:
+                self.dft_recursive(vertex)
+
+        # We are done - empty the visited set
+        self.dfs_visited.clear()
 
     
     # #################### Solution code ##########################
@@ -94,12 +97,6 @@ class Graph:
 
 
     ##########################################################
-
-
-
-        
-
-
 
     def bfs(self, starting_vertex, destination_vertex):
 
@@ -142,7 +139,6 @@ class Graph:
                 
                 
             return []
-
 
     # #################### Solution code ##########################
 
