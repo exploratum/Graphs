@@ -127,11 +127,11 @@ class Graph:
                 adjacent_vertices = self.vertices[last_vertex]
 
                 # cycle through all non visited adjacent vertices
-                for adjacent_vertex in adjacent_vertices:
-                    if adjacent_vertex not in visited:
+                for vertex in adjacent_vertices:
+                    if vertex not in visited:
                         new_path = path.copy()
-                        new_path.append(adjacent_vertex)
-                        if adjacent_vertex == destination_vertex:
+                        new_path.append(vertex)
+                        if vertex == destination_vertex:
                             return new_path
                         else:
                             queue.enqueue(new_path)
@@ -161,13 +161,51 @@ class Graph:
     #                 new_path.append(next_vert)
     #                 qq.enqueue(new_path)
         # #########################################################
-            
-    def dfs(self, starting_vertex, destination_vertex):
+
+    # #########################################################
+    #                   My own solution        
+    # #########################################################
+    # def dfs(self, starting_vertex, destination_vertex):
+    #     """
+    #     Return a list containing a path from
+    #     starting_vertex to destination_vertex in
+    #     depth-first order.
+    #     """
+    #     start_path = [starting_vertex]
+
+    #     if starting_vertex == destination_vertex:
+    #         return [starting_vertex]
+
+    #     else:
+    #         # Flag current vertex as visited
+    #         self.dfs_visited.add(starting_vertex)
+
+    #         # get set of adjacent vertices
+    #         adjacent_vertices = self.vertices[starting_vertex]
+
+    #         # get adjacent vertices not already visited
+    #         adjacent_not_visited = adjacent_vertices.difference(
+    #             self.dfs_visited)
+
+    #         #process adjacent vertices not already visited
+    #         for vertex in adjacent_not_visited:
+    #             found = self.dfs(vertex, destination_vertex)
+    #             if found:
+    #                 return start_path + found
+    #         return None
+
+    # ############################################################
+    # My own solution (modified with local storage visited=None)  
+    # ############################################################   
+    def dfs(self, starting_vertex, destination_vertex, visited = None):
         """
         Return a list containing a path from
         starting_vertex to destination_vertex in
         depth-first order.
         """
+        if visited == None:
+            visited = set()
+
         start_path = [starting_vertex]
 
         if starting_vertex == destination_vertex:
@@ -175,24 +213,21 @@ class Graph:
 
         else:
             # Flag current vertex as visited
-            self.dfs_visited.add(starting_vertex)
+            visited.add(starting_vertex)
 
             # get set of adjacent vertices
             adjacent_vertices = self.vertices[starting_vertex]
 
             # get adjacent vertices not already visited
-            adjacent_not_visited = adjacent_vertices.difference(
-                self.dfs_visited)
+            adjacent_not_visited = adjacent_vertices.difference(visited)
 
             #process adjacent vertices not already visited
-            for adjacent_vertex in adjacent_not_visited:
-                found = self.dfs(adjacent_vertex, destination_vertex)
+            for vertex in adjacent_not_visited:
+                found = self.dfs(vertex, destination_vertex, visited)
                 if found:
                     return start_path + found
             return None
-
-    
-    
+            
     # #################### Solution code ##########################
                 
     # def dfs(self, starting_vertex, destination_vertex):
